@@ -8,7 +8,7 @@ A Chrome extension that enhances your New York Times crossword experience by rem
 - 📢 **Remove Advertisements** - Clean up ads for a distraction-free experience
 - 🎯 **Improve Layout** - Optimize spacing, focus, and overall crossword presentation
 - ⚙️ **Customizable Settings** - Toggle features on/off through an easy-to-use popup
-- 🔄 **Auto-Apply** - Settings automatically apply when you visit NYT crossword pages
+- 🎯 **Manual Control** - Banners are hidden only when you click the extension button
 
 ## Installation
 
@@ -29,11 +29,9 @@ _Coming soon - this extension will be published to the Chrome Web Store_
 1. **Install the extension** following the instructions above
 2. **Navigate** to any NYT crossword page (e.g., https://www.nytimes.com/crosswords/game/daily)
 3. **Click the extension icon** in your browser toolbar to open settings
-4. **Toggle features** on/off as desired:
-   - Hide subscription banners
-   - Remove advertisements
-   - Improve layout and spacing
-5. **Settings auto-save** and apply immediately
+4. **Enable "Hide Headers"** checkbox if desired
+5. **Click "Save Settings"** or simply toggle the checkbox to hide banners immediately
+6. **Banners will be hidden** only after you take action through the popup - they remain visible by default
 
 ## Technical Details
 
@@ -102,7 +100,7 @@ This extension:
 ### Extension Not Working?
 
 1. **Check the URL** - Make sure you're on a NYT crossword page
-2. **Refresh the page** after installing or changing settings
+2. **Click the extension icon** and save settings to hide banners
 3. **Check permissions** - Ensure the extension is enabled
 4. **Try incognito mode** to test without other extensions
 
