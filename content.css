@@ -1,0 +1,12 @@
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .pz-game-screen {
+        padding: 10px !important;
+    }
+    
+    .pz-toolbar {
+        flex-wrap: wrap !important;
+        gap: 5px !important;
+    }
+}

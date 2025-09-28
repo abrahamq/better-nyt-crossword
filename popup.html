@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Better NYT Crossword</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">Better NYT Crossword</h1>
+            <p class="subtitle">Enhance your crossword experience</p>
+        </header>
+
+        <main class="main">
+            <div class="settings-section">
+                <h2 class="section-title">Settings</h2>
+                
+                <div class="setting-item">
+                    <label class="setting-label">
+                        <input type="checkbox" id="hideBanner" class="setting-checkbox" checked>
+                        <span class="checkmark"></span>
+                        <span class="setting-text">Hide subscription banners</span>
+                    </label>
+                    <p class="setting-description">Remove distracting subscription prompts and banners</p>
+                </div>
+
+                <div class="setting-item">
+                    <label class="setting-label">
+                        <input type="checkbox" id="hideAds" class="setting-checkbox" checked>
+                        <span class="checkmark"></span>
+                        <span class="setting-text">Hide advertisements</span>
+                    </label>
+                    <p class="setting-description">Remove ads for a cleaner experience</p>
+                </div>
+
+                <div class="setting-item">
+                    <label class="setting-label">
+                        <input type="checkbox" id="improveLayout" class="setting-checkbox" checked>
+                        <span class="checkmark"></span>
+                        <span class="setting-text">Improve layout</span>
+                    </label>
+                    <p class="setting-description">Optimize spacing and focus for better gameplay</p>
+                </div>
+            </div>
+
+            <div class="actions-section">
+                <button id="saveSettings" class="btn btn-primary">Save Settings</button>
+                <button id="resetSettings" class="btn btn-secondary">Reset to Default</button>
+            </div>
+
+            <div class="status-section">
+                <div id="statusMessage" class="status-message hidden"></div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="#" id="aboutLink" class="footer-link">About</a>
+                <a href="#" id="supportLink" class="footer-link">Support</a>
+            </div>
+            <p class="version">v1.0.0</p>
+        </footer>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
