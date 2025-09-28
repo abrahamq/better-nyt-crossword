@@ -35,14 +35,34 @@ document.addEventListener("DOMContentLoaded", function () {
     chrome.storage.sync.set(settings, function () {
       showStatus("Settings saved successfully!", "success");
 
-      // Reload the current tab if it's a NYT crossword page
+      // Send message to content script to hide elements if hiding is enabled
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         const currentTab = tabs[0];
         if (
           currentTab.url &&
           currentTab.url.includes("nytimes.com/crosswords")
         ) {
-          chrome.tabs.reload(currentTab.id);
+          if (hideHeadersCheckbox.checked) {
+            // Send message to content script to hide elements
+            chrome.tabs.sendMessage(
+              currentTab.id,
+              { action: "hideElements" },
+              function (response) {
+                if (chrome.runtime.lastError) {
+                  console.log(
+                    "Could not send message to content script:",
+                    chrome.runtime.lastError.message
+                  );
+                  // Fallback: reload the page if content script isn't responding
+                  chrome.tabs.reload(currentTab.id);
+                } else {
+                  console.log(
+                    "Successfully sent hideElements message to content script"
+                  );
+                }
+              }
+            );
+          }
         }
       });
     });

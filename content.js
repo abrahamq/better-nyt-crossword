@@ -1,55 +1,37 @@
 // Better NYT Crossword - Content Script
-// Hides specific header elements
+// Hides specific header elements only when triggered by popup
 
 (function () {
   "use strict";
 
   function hideElements() {
-    // Check if hiding is enabled
-    chrome.storage.sync.get(["hideHeaders"], function (result) {
-      const shouldHide = result.hideHeaders !== false; // default true
+    console.log("Hiding elements");
+    const selector = "#banner-portal";
 
-      console.log("shouldHide:", shouldHide);
-      if (shouldHide) {
-        console.log("Hiding elements");
-        const selector = "#banner-portal";
+    const element = document.querySelector(selector);
+    if (element) {
+      element.remove();
+      console.log("Removed banner portal");
+    }
+    const navBarSelector = "#js-global-nav";
 
-        const element = document.querySelector(selector);
-        if (element) {
-          element.remove();
-        }
-        const navBarSelector = "#js-global-nav";
-
-        const navBarElement = document.querySelector(navBarSelector);
-        if (navBarElement) {
-          navBarElement.remove();
-        }
-      }
-    });
+    const navBarElement = document.querySelector(navBarSelector);
+    if (navBarElement) {
+      navBarElement.remove();
+      console.log("Removed navigation bar");
+    }
   }
 
-  // Run immediately
-  document.addEventListener("DOMContentLoaded", () => {
-    const observer = new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
-        if (mutation.addedNodes.length > 0) {
-          hideElements();
-        }
-      });
-    });
-
-    observer.observe(document.querySelector("#banner-portal"), {
-      childList: true,
-      subtree: true,
-    });
+  // Listen for messages from popup to hide elements
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === "hideElements") {
+      console.log("Received hideElements message from popup");
+      hideElements();
+      sendResponse({ success: true });
+    }
   });
 
-  // Re-apply on page changes (for SPA navigation)
-  let currentUrl = location.href;
-  setInterval(() => {
-    if (location.href !== currentUrl) {
-      currentUrl = location.href;
-      setTimeout(hideElements, 500);
-    }
-  }, 1000);
+  console.log(
+    "Better NYT Crossword content script loaded - waiting for popup trigger"
+  );
 })();
