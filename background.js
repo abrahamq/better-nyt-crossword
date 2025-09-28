@@ -5,9 +5,7 @@ chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === "install") {
     // Set default settings on first install
     chrome.storage.sync.set({
-      hideBanner: true,
-      hideAds: true,
-      improveLayout: true,
+      hideHeaders: true,
     });
 
     console.log("Better NYT Crossword extension installed");
@@ -40,12 +38,9 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 // Handle messages from content script or popup (if needed in future)
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "getSettings") {
-    chrome.storage.sync.get(
-      ["hideBanner", "hideAds", "improveLayout"],
-      (result) => {
-        sendResponse(result);
-      }
-    );
+    chrome.storage.sync.get(["hideHeaders"], (result) => {
+      sendResponse(result);
+    });
     return true; // Keep message channel open for async response
   }
 

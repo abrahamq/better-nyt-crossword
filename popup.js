@@ -2,9 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
   // Get DOM elements
-  const hideBannerCheckbox = document.getElementById("hideBanner");
-  const hideAdsCheckbox = document.getElementById("hideAds");
-  const improveLayoutCheckbox = document.getElementById("improveLayout");
+  const hideHeadersCheckbox = document.getElementById("hideHeaders");
   const saveButton = document.getElementById("saveSettings");
   const resetButton = document.getElementById("resetSettings");
   const statusMessage = document.getElementById("statusMessage");
@@ -21,28 +19,17 @@ document.addEventListener("DOMContentLoaded", function () {
   supportLink.addEventListener("click", showSupport);
 
   // Auto-save on checkbox change
-  [hideBannerCheckbox, hideAdsCheckbox, improveLayoutCheckbox].forEach(
-    (checkbox) => {
-      checkbox.addEventListener("change", autoSave);
-    }
-  );
+  hideHeadersCheckbox.addEventListener("change", autoSave);
 
   function loadSettings() {
-    chrome.storage.sync.get(
-      ["hideBanner", "hideAds", "improveLayout"],
-      function (result) {
-        hideBannerCheckbox.checked = result.hideBanner !== false; // default true
-        hideAdsCheckbox.checked = result.hideAds !== false; // default true
-        improveLayoutCheckbox.checked = result.improveLayout !== false; // default true
-      }
-    );
+    chrome.storage.sync.get(["hideHeaders"], function (result) {
+      hideHeadersCheckbox.checked = result.hideHeaders !== false; // default true
+    });
   }
 
   function saveSettings() {
     const settings = {
-      hideBanner: hideBannerCheckbox.checked,
-      hideAds: hideAdsCheckbox.checked,
-      improveLayout: improveLayoutCheckbox.checked,
+      hideHeaders: hideHeadersCheckbox.checked,
     };
 
     chrome.storage.sync.set(settings, function () {
@@ -70,10 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function resetSettings() {
-    hideBannerCheckbox.checked = true;
-    hideAdsCheckbox.checked = true;
-    improveLayoutCheckbox.checked = true;
-
+    hideHeadersCheckbox.checked = true;
     saveSettings();
     showStatus("Settings reset to default", "info");
   }

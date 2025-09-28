@@ -1,128 +1,55 @@
 // Better NYT Crossword - Content Script
-// Hides banner and improves crossword experience
+// Hides specific header elements
 
 (function () {
   "use strict";
 
-  // Configuration
-  const config = {
-    hideBanner: true,
-    hideAds: true,
-    improveLayout: true,
-  };
+  function hideElements() {
+    // Check if hiding is enabled
+    chrome.storage.sync.get(["hideHeaders"], function (result) {
+      const shouldHide = result.hideHeaders !== false; // default true
 
-  // Load user preferences
-  chrome.storage.sync.get(
-    ["hideBanner", "hideAds", "improveLayout"],
-    function (result) {
-      config.hideBanner = result.hideBanner !== false; // default true
-      config.hideAds = result.hideAds !== false; // default true
-      config.improveLayout = result.improveLayout !== false; // default true
+      console.log("shouldHide:", shouldHide);
+      if (shouldHide) {
+        console.log("Hiding elements");
+        const selector = "#banner-portal";
 
-      applyImprovements();
-    }
-  );
+        const element = document.querySelector(selector);
+        if (element) {
+          element.remove();
+        }
+        const navBarSelector = "#js-global-nav";
 
-  function applyImprovements() {
-    // Hide banner elements
-    if (config.hideBanner) {
-      hideBannerElements();
-    }
-
-    // Hide ads
-    if (config.hideAds) {
-      hideAds();
-    }
-
-    // Improve layout
-    if (config.improveLayout) {
-      improveLayout();
-    }
-  }
-
-  function hideBannerElements() {
-    const selectors = [
-      "#banner-portal", // Common banner class
-      ".pz-header",
-      ".pz-hide-loading",
-      ".pz-game-header",
-    ];
-
-    document.onload(() => {
-      selectors.forEach((selector) => {
-        const elements = document.querySelectorAll(selector);
-        console.log(elements);
-        elements.forEach((element) => {
-          element.style.visibility = "hidden !important";
-        });
-      });
-    });
-  }
-
-  function hideAds() {
-    const adSelectors = [
-      ".ad",
-      ".advertisement",
-      ".pz-ad",
-      '[class*="ad-"]',
-      '[id*="ad-"]',
-      ".dfp-ad",
-      ".google-ad",
-    ];
-
-    adSelectors.forEach((selector) => {
-      const elements = document.querySelectorAll(selector);
-      elements.forEach((element) => {
-        element.style.display = "none !important";
-      });
-    });
-  }
-
-  function improveLayout() {
-    // Maximize crossword area
-    const gameContainer = document.querySelector(".pz-game-screen");
-    if (gameContainer) {
-      gameContainer.style.maxWidth = "none";
-      gameContainer.style.width = "100%";
-    }
-
-    // Improve toolbar spacing
-    const toolbar = document.querySelector(".pz-toolbar");
-    if (toolbar) {
-      toolbar.style.padding = "10px";
-      toolbar.style.justifyContent = "center";
-    }
-  }
-
-  // Observer for dynamically loaded content
-  const observer = new MutationObserver(function (mutations) {
-    mutations.forEach(function (mutation) {
-      if (mutation.addedNodes.length > 0) {
-        // Re-apply improvements when new content is loaded
-        setTimeout(applyImprovements, 100);
+        const navBarElement = document.querySelector(navBarSelector);
+        if (navBarElement) {
+          navBarElement.remove();
+        }
       }
     });
-  });
-
-  // Start observing
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true,
-  });
-
-  // Initial application
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", applyImprovements);
-  } else {
-    applyImprovements();
   }
+
+  // Run immediately
+  document.addEventListener("DOMContentLoaded", () => {
+    const observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.addedNodes.length > 0) {
+          hideElements();
+        }
+      });
+    });
+
+    observer.observe(document.querySelector("#banner-portal"), {
+      childList: true,
+      subtree: true,
+    });
+  });
 
   // Re-apply on page changes (for SPA navigation)
   let currentUrl = location.href;
   setInterval(() => {
     if (location.href !== currentUrl) {
       currentUrl = location.href;
-      setTimeout(applyImprovements, 500);
+      setTimeout(hideElements, 500);
     }
   }, 1000);
 })();
